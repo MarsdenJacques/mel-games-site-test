@@ -8,7 +8,7 @@ export default function LessonMenu({ currentMode, toggleButtonText, newLessonTex
             <div>
                 <Searchbar searchForLessons = {searchForLessons} searchData={searchData} Callback={SearchCallback}/>
                 <Button text = {toggleButtonText} Callback = {ToggleCallback}/>
-                <Button text = {newLessonText} Callback = {NewLessonCallback}/>
+                {newLessonText !== undefined ? <Button text = {newLessonText} Callback = {NewLessonCallback}/> : <></>}
             </div>
         </div>
     )
