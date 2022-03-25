@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useOutletContext } from "remix";
 import LessonPlan from "~/components/lessonplan";
 import LessonMenu from "~/components/lessonmenu";
 import LessonBlock from "~/components/lessonblock";
@@ -6,6 +7,9 @@ import Button from "~/components/button";
 import { Lessons, Blocks, LessonBlocks, LessonPlayers, Players } from "~/dummydata";
 import { Link } from "remix";
 export default function LessonsPage() {
+
+  const { lessonBlocks, setLessonBlocks, lessons, setLessons, lessonPlayers, setLessonPlayers, blocks } = useOutletContext()
+
 
   const LayoutModes = {
     createLesson: 'Create Lesson',
@@ -17,9 +21,9 @@ export default function LessonsPage() {
   const [leftData, setLeftData] = useState([])
   const [searchForLessons, setSearchForLessons] = useState(false)
   const [searchData, setSearchData] = useState([...Blocks])
-  const [blockPairings, setBlockPairings] = useState([...LessonBlocks])
-  const [playerPairings, setPlayerPairings] = useState([...LessonPlayers])
-  const [lessonData, setLessonData] = useState([...Lessons])
+  const [blockPairings, setBlockPairings] = useState([...lessonBlocks])
+  const [playerPairings, setPlayerPairings] = useState([...lessonPlayers])
+  const [lessonData, setLessonData] = useState([...lessons])
   const [blockData, setBlockData] = useState([...Blocks])
   const emptyLesson = {
     title: 'title',
@@ -45,6 +49,23 @@ export default function LessonsPage() {
     setLessonData(populatedLessons)
   },[,blockPairings, playerPairings])
 
+  useEffect(()=>{
+    setBlockPairings([...lessonBlocks])
+  },[lessonBlocks])
+
+  useEffect(()=>{
+    setLessonData([...lessons])
+  },[lessons])
+
+  useEffect(()=>{
+    setPlayerPairings([...lessonPlayers])
+  },[lessonPlayers])
+
+  useEffect(()=>{
+    const newSearchData = searchForLessons ? lessons : blocks //cheating
+    setSearchData(newSearchData)
+  },[lessons,blocks])
+
   function ReturnSearch(results){
     if(results === undefined) return
     setLeftData(results)
@@ -56,25 +77,6 @@ export default function LessonsPage() {
   }
 
   function AddBlockToActiveLesson(block){
-    /*let newLessonData = [...lessonData]
-    let newLesson
-    let currentRightData = rightData
-    if(currentRightData === undefined){
-      currentRightData = emptyLesson
-    }
-    if(currentRightData.blocks.length === 0)
-    {
-      newLesson = currentRightData
-      newLesson.blocks.push(block)
-      newLessonData.push(newLesson)
-    }
-    else
-    {
-      newLesson = newLessonData.find(element=>element.id === rightData.id)
-      newLesson.blocks.push(block)
-    }
-    setLessonData(newLessonData)
-    EditLesson(newLesson)*/
     let newLesson
     let newLessonData = [...lessonData]
     let currentRightData = rightData
@@ -87,47 +89,37 @@ export default function LessonsPage() {
       newLesson.blocks.push(block)
       newLessonData.push(newLesson)
     }
-    setLessonData(newLessonData)
+    setLessons(newLessonData)
     let newBlockPairingData = [...blockPairings]
     newBlockPairingData.push({lesson: currentRightData.id, block: block.id})
-    setBlockPairings(newBlockPairingData)
+    //setBlockPairings(newBlockPairingData)
+    setLessonBlocks(newBlockPairingData)
+  }
+
+  //should be backend
+  function RemovePlayersFromDeadLesson(lessonId){
+    let newLessonPlayers = lessonPlayers.filter(element=>element.lesson !== lessonId)
+    setLessonPlayers(newLessonPlayers)
   }
 
   function RemoveBlockFromActiveLesson(blockIndex){
-    /*if(rightData === undefined) return
-    let newLessonData = [...lessonData]
-    let lessonIndex = newLessonData.findIndex(element=>element.id === rightData.id)
-    let newLesson = newLessonData[lessonIndex]
-    if(newLesson.blocks.length <= 0) return
-    newLesson.blocks.splice(blockIndex, 1)
-    if(newLesson.blocks.length <= 0){
-      newLessonData.splice(lessonIndex)
-      setLessonData(newLessonData)
-      NewLesson()
-      return
-    }
-    else{
-      newLessonData[lessonIndex] = newLesson
-      setLessonData(newLessonData)
-      EditLesson(newLesson)
-    }*/
     let newLessonData = [...lessonData]
     let currentRightData = rightData
-    console.log(currentRightData.blocks.length)
     if(currentRightData === undefined) return
     if(currentRightData.blocks.length <= 0) return
     if(currentRightData.blocks.length === 1){
       let deleteIndex = newLessonData.findIndex(element=>element.id === currentRightData.id)
       newLessonData.splice(deleteIndex,1)
-      setLessonData(newLessonData)
-      console.log(newLessonData)
+      setLessons(newLessonData)
+      RemovePlayersFromDeadLesson(currentRightData.id)
       NewLesson()
     }
     let block = currentRightData.blocks[blockIndex]
     let newBlockPairingData = [...blockPairings]
-    let pairIndex = newBlockPairingData.findIndex(element=>{element.lesson === currentRightData.id && element.block === block.id})
+    let pairIndex = newBlockPairingData.findIndex(element=>element.lesson === currentRightData.id && element.block === block)
     newBlockPairingData.splice(pairIndex,1)
-    setBlockPairings(newBlockPairingData)
+    //setBlockPairings(newBlockPairingData)
+    setLessonBlocks(newBlockPairingData)
   }
 
   function EditLesson(lesson){
@@ -157,7 +149,7 @@ export default function LessonsPage() {
     else{
       newPairingData.splice(pairingIndex,1)
     }
-    setPlayerPairings(newPairingData)
+    setLessonPlayers(newPairingData)
   }
 
   function LessonEditing(){
@@ -169,7 +161,7 @@ export default function LessonsPage() {
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <Link to={'/'}>Home</Link>
         <LessonMenu currentMode={currentMode} 
-        toggleButtonText={searchForLessons ? 'Lessons' : 'Blocks'} 
+        toggleButtonText={searchForLessons ? 'lessons' : 'blocks'} 
         newLessonText={'new lesson'} searchForLessons={searchForLessons} searchData={searchData}
         SearchCallback={ReturnSearch} NewLessonCallback={NewLesson} ToggleCallback={ToggleSearchType}/>
         <div style={{display: 'flex', flexDirection: 'row', paddingTop: '50px', width: '100%'}}>
@@ -180,7 +172,7 @@ export default function LessonsPage() {
             leftData.map((element, index)=>{
               return <LessonBlock block={element} key={index} EditCallback={EditBlock} AddCallback={AddBlockToActiveLesson} RemoveCallback={()=>{return}} editable={true} activeLesson={LessonEditing()} />
             })}
-            <Button text={'New Block'} Callback={()=>console.log('New Block')}/>
+            <Button text={'new block'} Callback={()=>console.log('new block')}/>
           </div> 
           <div style={{width: '50%', paddingInline: '5px'}}>
             {currentMode === LayoutModes.editBlock ? <LessonBlock block={rightData} EditCallback={()=>{return}} AddCallback={(block)=>{return}} RemoveCallback={()=>{return}} editable={false} activeLesson={false} /> : 

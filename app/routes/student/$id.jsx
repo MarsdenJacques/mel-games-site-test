@@ -1,6 +1,6 @@
-import { Lessons, LessonPlayers, LessonBlocks, Blocks } from "~/dummydata"
+import { LessonPlayers, Blocks } from "~/dummydata"
 import { useState } from 'react'
-import { json, Link, useLoaderData } from "remix";
+import { json, Link, useLoaderData, useOutletContext } from "remix";
 import LessonPlan from "~/components/lessonplan";
 import Button from "~/components/button";
 import LessonMenu from "~/components/lessonmenu";
@@ -12,16 +12,18 @@ export const loader = async ({ params }) => {
 
 export default function Student(){
 
+    const { lessonBlocks, lessons, lessonPlayers } = useOutletContext()
+
     const studentId = useLoaderData();
 
-    const lessonsWithBlocks = PopulateLessons(Lessons)
+    const lessonsWithBlocks = PopulateLessons([...lessons])
 
     const [gameText, setGameText] = useState('HAPPY VALLEY')
     const [searchForLessons, setSearchForLessons] = useState(true)
     const [displayData, setDisplayData] = useState([...lessonsWithBlocks.splice()])
 
     function GetLessonBlocks(lesson){
-        let filteredLessonBlocks = LessonBlocks.filter(element=>element.lesson == lesson.id)
+        let filteredLessonBlocks = lessonBlocks.filter(element=>element.lesson == lesson.id)
         filteredLessonBlocks = filteredLessonBlocks.map(element=>element.block)
         return filteredLessonBlocks
     }
@@ -36,13 +38,13 @@ export default function Student(){
     }
 
     function GetStudentLessons(){
-        let filteredLessons = LessonPlayers.filter(element=>{
+        let filteredLessons = lessonPlayers.filter(element=>{
             return element.player == studentId})
         filteredLessons = filteredLessons.map(element=>{
             return element.lesson
         })
         filteredLessons = filteredLessons.map(lessonId=>{
-                return Lessons.find(element=>element.id === lessonId)
+                return lessons.find(element=>element.id === lessonId)
             })
         return PopulateLessons(filteredLessons)
     }
@@ -77,7 +79,7 @@ export default function Student(){
             <div style={{paddingBlock:'15px'}}>
                 <h3 style={{textAlign: 'center'}}>Search Lessons and Activities</h3>
                 <LessonMenu currentMode={''} 
-                searchForLessons={searchForLessons} searchData={searchForLessons ? Lessons : Blocks} SearchCallback={SearchResults} 
+                searchForLessons={searchForLessons} searchData={searchForLessons ? lessons : Blocks} SearchCallback={SearchResults} 
                 toggleButtonText={searchForLessons ? 'lessons' : 'blocks'} ToggleCallback={()=>setSearchForLessons(!searchForLessons)}/>
                 {displayData.map((element, index)=>{
                     
