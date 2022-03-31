@@ -1,9 +1,10 @@
 import Button from "./button"
+import SmallButton from "./small-button"
 import { useRef, useEffect, useState } from "react"
 export default function Searchbar({searchForLessons, searchData, Callback}){
 
     const [searched, setSearched] = useState(false)
-    const [currentQuery, setCurrentQuery] = useState({title: '', duration: '', type: ''})
+    const [currentQuery, setCurrentQuery] = useState({title: '', length: '', type: ''})
 
     const inputRef = useRef()
     useEffect(()=>{
@@ -25,8 +26,8 @@ export default function Searchbar({searchForLessons, searchData, Callback}){
             searchResults = searchResults.filter(element=>element.title.toLowerCase().includes(currentQuery.title.toLowerCase()))
             didSearch = true
         }
-        if(currentQuery.duration !== ''){
-            searchResults = searchResults.filter(element=>element.duration === currentQuery.duration)
+        if(currentQuery.length !== ''){
+            searchResults = searchResults.filter(element=>element.length === currentQuery.length)
             didSearch = true
         }
         if(currentQuery.type !== ''){
@@ -38,36 +39,20 @@ export default function Searchbar({searchForLessons, searchData, Callback}){
     }
 
     function SearchTitle(){
-        /*const searchTerm = inputRef.current.value
-        if(searchTerm === '' || searchTerm === undefined){
-            Callback(searchData)
-            return
-        }
-        setSearched(true)
-        const searchResults = searchData.filter(element=>element.title === searchTerm)
-        Callback(searchResults)*/
         let newQuery = {}
         Object.assign(newQuery, currentQuery)
         newQuery.title = inputRef.current.value
         setCurrentQuery(newQuery)
     }
 
-    function SearchDuration(duration){
-        /*setSearched(true)
-        const searchResults = searchData.filter(element=>element.duration === duration)
-        Callback(searchResults)*/
+    function SearchDuration(length){
         let newQuery = {}
         Object.assign(newQuery, currentQuery)
-        console.log(newQuery)
-        newQuery.duration = currentQuery.duration === duration ? '' : duration
-        console.log(newQuery)
+        newQuery.length = currentQuery.length === length ? '' : length
         setCurrentQuery(newQuery)
     }
 
     function SearchType(type){
-        /*setSearched(true)
-        const searchResults = searchData.filter(element=>element.type === type)
-        Callback(searchResults)*/
         let newQuery = {}
         Object.assign(newQuery, currentQuery)
         newQuery.type = currentQuery.type === type ? '' : type
@@ -80,29 +65,31 @@ export default function Searchbar({searchForLessons, searchData, Callback}){
         let newQuery = {}
         Object.assign(newQuery, currentQuery)
         newQuery.title = ''
-        newQuery.duration = ''
+        newQuery.length = ''
         newQuery.type = ''
         setCurrentQuery(newQuery)
     }
 
     return(
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-            <div style={{display: 'flex', flexDirection: 'row'}}>
-                <input ref = {inputRef} style={{border: 'solid black'}}></input>
-                <Button text = {'search'} Callback={SearchTitle}/>
-                {searched ? <Button text={'clear'} Callback={Clear}/> : <></>}
+        <div className="bg-pink-500 p-4">
+            <div className="bg-purple-500 p-4">
+                <input ref = {inputRef} />
+                <Button text = {'search'} Callback={SearchTitle} />
+                {searched ? <Button text={'clear'} Callback={Clear} /> : <></>}
             </div>
-            {!searchForLessons ? <><div style={{display: 'flex', flexDirection: 'row'}}>
-                <Button text = {'5m'} Callback={()=>SearchDuration('5m')} selected={currentQuery.duration==='5m'}/>
-                <Button text = {'10m'} Callback={()=>SearchDuration('10m')} selected={currentQuery.duration==='10m'}/>
-                <Button text = {'15m'} Callback={()=>SearchDuration('15m')} selected={currentQuery.duration==='15m'}/>
-                <Button text = {'30m'} Callback={()=>SearchDuration('30m')} selected={currentQuery.duration==='30m'}/>
-            </div>
-            <div style={{display: 'flex', flexDirection: 'row'}}>
-                <Button text = {'Game'} Callback={()=>SearchType('Game')} selected={currentQuery.type==='Game'}/>
-                <Button text = {'Flashcard'} Callback={()=>SearchType('Flashcard')} selected={currentQuery.type==='Flashcard'}/>
-                <Button text = {'Video'} Callback={()=>SearchType('Video')} selected={currentQuery.type==='Video'}/>
+            {!searchForLessons ? <> <div className="bg-green-500 p-4">
+                <SmallButton text = {'5m'} Callback={()=>SearchDuration('5m')} selected={currentQuery.length==='5m'}/>
+                <SmallButton text = {'10m'} Callback={()=>SearchDuration('10m')} selected={currentQuery.length==='10m'}/>
+                <SmallButton text = {'15m'} Callback={()=>SearchDuration('15m')} selected={currentQuery.length==='15m'}/>
+                <SmallButton text = {'30m'} Callback={()=>SearchDuration('30m')} selected={currentQuery.length==='30m'}/>
             </div></>: <></>}
         </div>
     )
 }
+
+/* <div style={{display: 'flex', flexDirection: 'row'}}>
+    <Button text = {'Game'} Callback={()=>SearchType('Game')} selected={currentQuery.type==='Game'}/>
+    <Button text = {'Flashcard'} Callback={()=>SearchType('Flashcard')} selected={currentQuery.type==='Flashcard'}/>
+    <Button text = {'Video'} Callback={()=>SearchType('Video')} selected={currentQuery.type==='Video'}/>
+    </div>*/
+//just in case

@@ -1,32 +1,23 @@
-import { Blocks } from "~/dummydata";
 import Button from "./button";
 
-export default function LessonBlock({block, EditCallback, AddCallback, RemoveCallback, editable, activeLesson, index}) {
+export default function LessonBlock({block, AddCallback, RemoveCallback, editable, activeLesson, index}) {
+    //editable means can have text edited or be added/removed from lesson
+    //active lesson means child of a lesson which is being edited
+    //index refers to position in lesson chunks of parent (used when removing in case same chunk present multiple times)
 
     let safeIndex = index
-
-    console.log(block)
-
     if(index === undefined){
-        if(!editable && activeLesson) return
-        safeIndex = 0
+        if(editable && activeLesson) return <></>//this should never happen, implies incorrect use of states somewhere above
+        safeIndex = 0 //only set default index value if index NOT NECESSARY
     }
     if(block === undefined) return <div></div>
-    const blockData = block.id === undefined ? Blocks.find(element=>element.id === block) : block;
-
-    console.log(blockData)
 
     return(
-        <div style={{marginBlock: '20px', outline: 'solid black', paddingInline: '5px', paddingBlock: '2px'}}>
-            <p>{block.title}</p>
-            <p>{block.type}</p>
-            <p>{block.text}</p>
-            <p>{block.duration}</p>
-            {editable ? 
-            <div>
-                <Button text={'edit'} Callback={()=>EditCallback(block)}/>
-                {activeLesson ? <Button text={'add'} Callback={()=>AddCallback(block)}/> : <></>}
-            </div> : activeLesson ? <Button text={'remove'} Callback={()=>RemoveCallback(index)}/> : <></>}
+        <div>
+            <h3 className="bg-yellow-200 p-2 m-2">{block.name}</h3>
+            <p className="bg-lime-200 p-2 m-2">{block.length}</p>
+            {editable ? <Button text={'add'} Callback={()=>AddCallback(block)}/> : <></>}
+            {activeLesson ? <Button text={'remove'} Callback={()=>RemoveCallback(index)}/> : <></>}
         </div>
     )
 }
