@@ -9,7 +9,7 @@ export const meta = () => {
     title: "Lesson Maker",
   };
 };
-export default function LessonsPage() {
+export default function LessonMaker() {
 
   const { lessons, blocks, SaveLesson, DeleteLesson, isTeacher } = useOutletContext()
   
@@ -102,43 +102,28 @@ export default function LessonsPage() {
   }
 
   return (
-    <div id="wrapper-lesson-maker">
-      <div id="container-lesson" className="">
+    <div id="wrapper-lesson-maker" className="w-full">
         <div id="page-title-lesson-maker" className="text-blue-400 text-3xl font-black p-8">
           <h1>Lesson Maker</h1>
         </div>
+        <div id="container-lesson-creator" className="px-8 pb-8 flex flex-row gap-8 w-full justify-evenly">
 
-        
-
-          <div id="container-lesson-creator" className="grid grid-cols-2 gap-10 p-10">
-
-
-
-
-            <div id="container-searchbox">
+            <div id="container-searchbox" className="w-1/2">
               <LessonMenu
               newLesson={!editingLesson} searchForLessons={searchForLessons} searchData={searchForLessons ? lessons : blocks}
               SearchCallback={ReturnSearch} NewLessonCallback={NewLesson} SaveCallback={SaveCurrentLesson}/>
               {searchForLessons ? leftData.map((element, index)=>{
-                return <LessonPlan key={index} lesson={element} EditCallback={EditLesson} RemoveBlockCallback={()=>{return}} editable={true} editing={false}/>
+                return <div className="mb-8" key={index}><LessonPlan lesson={element} EditCallback={EditLesson} RemoveBlockCallback={()=>{return}} editable={true} editing={false}/></div>
               }):leftData.map((element, index)=>{
                 return <LessonBlock block={element} key={index} AddCallback={AddBlockToActiveLesson} RemoveCallback={()=>{return}} editable={true} activeLesson={false} />
               })}
             </div>
-
-
-            <div id="container-lesson-maker-right" className="row-span-2 p-4 border border-slate-500 rounded-xl">
+            
+            <div id="container-lesson-maker-right" className="p-4 px-8 border border-slate-500 rounded-xl w-1/2">
               <LessonPlan lesson={rightData} SetLessonData={UpdateLessonName} EditCallback={()=>{return}} DeleteCallback={DeleteCurrentLesson} RemoveBlockCallback={RemoveBlockFromActiveLesson} editable={true} editing={true}/>
             </div>
 
-
-          </div>
-
-
-
-
-      </div>
-
+        </div>
     </div>
     
   );

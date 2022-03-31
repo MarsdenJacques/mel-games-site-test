@@ -9,7 +9,7 @@ export const meta = () => {
       title: "Lesson Viewer",
     };
   };
-export default function Student(){
+export default function LessonViewer(){
 
     const { lessons } = useOutletContext()
 
@@ -51,14 +51,14 @@ export default function Student(){
 
 
 				<div id='container-lesson-viewer' className='flex flex-row'>
-					<div id="container-search-section" className='px-8 w-1/3'>
+					<div id="container-search-section" className='px-8'>
 						<div id='container-search-bar'>
 							<Searchbar searchForLessons = {true} searchData={lessons} Callback={SearchResults}/>
 							{displayData.map((element, index)=>{
 								return(
-									<div id="container-lesson-plans" className='' key={index}>
+									<div id="container-lesson-plans" className='mb-20' key={index}>
 										<LessonPlan lesson={element} EditCallback={()=>{return}} RemoveBlockCallback={()=>{return}} editable={false} editing={false} /> 
-										<Button text={'run'} Callback={()=>PlayLesson(element)} />
+                    <div className='flex justify-center'><Button text={'run'} Callback={()=>PlayLesson(element)} /></div>
 									</div>
 								)
 								})}
@@ -67,14 +67,19 @@ export default function Student(){
 					</div>
 
 
-					<div id="presentation" className=' w-full'>
+					<div id="presentation" className='w-full'>
           {vidList.length > 0 ? 
-              <div>
-                <h3>{vidList[currentVid].text}</h3>
-                <VideoEmbed src={vidList[currentVid].link}/>
+              <div id="container-video-box" className='border border-slate-500 rounded-3xl mr-8 max-h-max'>
+                <div className='p-4 font-bold'>
+                  <h3>{vidList[currentVid].text}</h3>
+                </div>  
                 <div>
-                  <Button text={'<'} Callback={LastVid}/>
-                  <Button text={'>'} Callback={NextVid}/>
+                  <VideoEmbed src={vidList[currentVid].link}/>
+                </div>
+
+                <div className='m-4 flex justify-between'>
+                  <Button text={'< Previous'} Callback={LastVid}/>
+                  <Button text={'Next >'} Callback={NextVid}/>
                 </div>
 
               </div>

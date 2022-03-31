@@ -72,17 +72,17 @@ export default function Searchbar({searchForLessons, searchData, Callback}){
 
     return(
         <div id="wrapper-searchbar">
-		    	<div className="text-sm leading-none"><p>Keyword Search</p></div>
+		    <div className="text-sm leading-none"><p>Keyword Search</p></div>
         		<div id="container-searchbar" className="flex flex-row gap-2">
                     <div className="w-full">
                         <input className="w-full my-1 p-2 focus:outline-none focus:shadow-outline border rounded-md border-slate-500 text-slate-600 leading-none px-4" ref = {inputRef} />
                     </div>
-                    <div>
+                    <div className="flex align-middle m-1">
                         <Button text = {'search'} Callback={SearchTitle} />
                     </div>
 				</div>
-				<div className="flex flex-row gap-2">
-					<div className="my-2 flex gap-2 flex-wrap text-xs">
+				<div className="flex flex-col gap-2 align-middle">
+					<div className="pt-2 flex flex-row flex-wrap gap-2 text-xs w-fit align-middle">
 						{!searchForLessons ? <> 
 							<SmallButton text = {'1 ~ 5mins'} Callback={()=>SearchDuration('1-5m')} selected={currentQuery.length==='1-5m'}/>
 							<SmallButton text = {'5 ~ 10mins'} Callback={()=>SearchDuration('5-10m')} selected={currentQuery.length==='5-10m'}/>
@@ -91,7 +91,9 @@ export default function Searchbar({searchForLessons, searchData, Callback}){
 							<SmallButton text = {'30mins +'} Callback={()=>SearchDuration('30m')} selected={currentQuery.length==='30m'}/>
 						</>: <></>}
 					</div>
-					{searched ?	<SmallButton text={'clear'} Callback={Clear} /> : <></>}
+                    <div className="pb-2">
+					    {searched ?	<SmallButton text={'clear'} Callback={Clear} /> : <></>}
+                    </div>
 				</div>
         </div>
     )

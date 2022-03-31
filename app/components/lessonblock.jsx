@@ -13,10 +13,14 @@ export default function LessonBlock({block, AddCallback, RemoveCallback, editabl
     if(block === undefined) return <div></div>
 
     return(
-        <div className="rounded-xl border-slate-300 border shadow my-2 hover:bg-zinc-100 flex flex-col">
-            <div className="flex flex-row justify-between pt-4 px-4">
-                <h3 className="flex font-bold text-xl">{block.name}</h3>
-                <p className="text-xs py-1 px-4 rounded-full align-middle bg-blue-200">Length: {block.length}</p>
+        <div className="rounded-xl border-slate-300 border shadow my-2 hover:bg-zinc-100 flex flex-col min-w-max">
+            <div className="flex flex-row justify-between align-middle p-4 gap-4">
+                <div className="max-w-20 break-all">
+                    <h3 className="font-bold text-xl">{block.name}</h3>
+                </div>
+                <div className="flex align-middle">
+                    <p className="text-xs py-1 px-4 rounded-full bg-blue-200 min-w-max max-h-7">Length: {block.length}</p>
+                </div>
             </div>
             <div className="">
                 <div className="flex flex-grow flex-row p-4">
