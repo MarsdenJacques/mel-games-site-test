@@ -102,26 +102,44 @@ export default function LessonsPage() {
   }
 
   return (
-    <div>
-      <div>
-        <Link to={'/'}>Home</Link>
-        <LessonMenu
-        newLesson={!editingLesson} searchForLessons={searchForLessons} searchData={searchForLessons ? lessons : blocks}
-        SearchCallback={ReturnSearch} NewLessonCallback={NewLesson} SaveCallback={SaveCurrentLesson}/>
-        <div style={{display: 'flex', flexDirection: 'row', paddingTop: '50px', width: '100%'}}>
-          <div style={{width: '50%', paddingInline: '5px'}}>
-            {searchForLessons ? leftData.map((element, index)=>{
-              return <LessonPlan key={index} lesson={element} EditCallback={EditLesson} RemoveBlockCallback={()=>{return}} editable={true} editing={false}/>
-            }): 
-            leftData.map((element, index)=>{
-              return <LessonBlock block={element} key={index} AddCallback={AddBlockToActiveLesson} RemoveCallback={()=>{return}} editable={true} activeLesson={false} />
-            })}
-          </div> 
-          <div style={{width: '50%', paddingInline: '5px'}}>
-            <LessonPlan lesson={rightData} SetLessonData={UpdateLessonName} EditCallback={()=>{return}} DeleteCallback={DeleteCurrentLesson} RemoveBlockCallback={RemoveBlockFromActiveLesson} editable={true} editing={true}/>
-          </div> 
+    <div id="wrapper-lesson-maker">
+      <div id="container-lesson" className="">
+        <div id="page-title-lesson-maker" className="text-blue-400 text-3xl font-black p-8">
+          <h1>Lesson Maker</h1>
         </div>
+
+        
+
+          <div id="container-lesson-creator" className="grid grid-cols-2 gap-10 p-10">
+
+
+
+
+            <div id="container-searchbox ">
+              <LessonMenu
+              newLesson={!editingLesson} searchForLessons={searchForLessons} searchData={searchForLessons ? lessons : blocks}
+              SearchCallback={ReturnSearch} NewLessonCallback={NewLesson} SaveCallback={SaveCurrentLesson}/>
+              {searchForLessons ? leftData.map((element, index)=>{
+                return <LessonPlan key={index} lesson={element} EditCallback={EditLesson} RemoveBlockCallback={()=>{return}} editable={true} editing={false}/>
+              }):leftData.map((element, index)=>{
+                return <LessonBlock block={element} key={index} AddCallback={AddBlockToActiveLesson} RemoveCallback={()=>{return}} editable={true} activeLesson={false} />
+              })}
+            </div>
+
+
+            <div id="container-lesson-maker-right" className="row-span-2 p-4 border border-slate-500 rounded-xl">
+              <LessonPlan lesson={rightData} SetLessonData={UpdateLessonName} EditCallback={()=>{return}} DeleteCallback={DeleteCurrentLesson} RemoveBlockCallback={RemoveBlockFromActiveLesson} editable={true} editing={true}/>
+            </div>
+
+
+          </div>
+
+
+
+
       </div>
+
     </div>
+    
   );
 }

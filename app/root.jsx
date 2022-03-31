@@ -1,4 +1,5 @@
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -195,6 +196,16 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <div id="header" className="bg-blue-300 p-4 px-8 font-bold text-zinc-100 flex flex-row justify-between items-center h-20">
+          <div id="titlelogo" className="font-vag text-3xl text-zinc-100">
+            <h1>happy valley digital</h1>
+          </div>
+          <div id="nav-menu" className="flex flex-row items-center justify-end gap-4">
+            <div className="text-blue-500"><Link to={'/lesson-viewer'}>Lesson Viewer</Link></div>
+            <div className="text-blue-500">{isTeacher ? <Link to={'/lesson-maker'}>Lesson Maker</Link> : <></>}</div>
+            <div id="header" className="text-blue-500"><Link to={'/'}>Home</Link></div>
+          </div>
+          </div>
         {token === '' ? <div>PLEASE LOGIN</div> : <Outlet context={context}/>}
         <ScrollRestoration />
         <Scripts />

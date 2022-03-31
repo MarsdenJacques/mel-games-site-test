@@ -28,32 +28,33 @@ export default function Student(){
     }
 
     return(
-        <div className='bg-blue-500 p-4 flex flex-col w-fit'>
-            <div className='bg-red-500 text-right text-xl text-zinc-100 p-2 px-4'>
-                <Link to={'/'}>Home</Link>
-            </div>
-            <div className='text-center'>
-                <h2 className='text-4xl font-vag text-zinc-100'>HAPPY VALLEY</h2>
-                {gameText.map((element, index)=>{
-                    return(
-                        <div key={index}>
-                            <p>{element.text}</p><a href={element.link}>{element.link}</a>
-                        </div>
-                    )
-                })}
-            </div>
-            <div>
-                <h3>Search Lessons</h3>
-                <Searchbar searchForLessons = {true} searchData={lessons} Callback={SearchResults}/>
-                {displayData.map((element, index)=>{
-                    return(
-                        <div key={index}>
-                            <LessonPlan lesson={element} EditCallback={()=>{return}} RemoveBlockCallback={()=>{return}} editable={false} editing={false} /> 
-                            <Button text={'run'} Callback={()=>PlayLesson(element)} />
-                        </div>
-                    )
-                })}
-            </div>
+      <div id="wrapper-lesson-viewer">
+        <div id="page-title-lesson-viewer" className="text-blue-400 text-3xl font-black p-8">
+          <h1>Lesson Viewer</h1>
         </div>
+
+				<div id="container-lesson-viewer" className='p-8'>
+					<div id="nothing">
+						{gameText.map((element, index)=>{
+							return(
+								<div key={index}>
+									<p>{element.text}</p><a href={element.link}>{element.link}</a>
+								</div>
+							)
+						})}
+					</div>
+					<div id='container-search-bar'>
+						<Searchbar searchForLessons = {true} searchData={lessons} Callback={SearchResults}/>
+						{displayData.map((element, index)=>{
+							return(
+								<div key={index}>
+									<LessonPlan lesson={element} EditCallback={()=>{return}} RemoveBlockCallback={()=>{return}} editable={false} editing={false} /> 
+									<Button text={'run'} Callback={()=>PlayLesson(element)} />
+								</div>
+							)
+							})}
+						</div>
+					</div>
+      </div>
     )
 }

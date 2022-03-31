@@ -15,18 +15,36 @@ export default function LessonPlan({lesson, SetLessonData, EditCallback, DeleteC
     if(lesson.lesson_chunks === undefined) return <div></div>
 
     return(
-        <div>
-            <h3>{lesson.name}</h3> 
+        <div id="wrapper-lesson-plan" className="rounded-xl p-4 m-4 my-2 flex flex-col">
+            <h3 className="font-bold text-2xl flex flex-row justify-center items-center">{lesson.name}</h3> 
             {editable ?
-                editing ? <div><input ref={inputRef} style={{border: 'solid black'}}/> <Button text={'set title'} Callback={SetName}/></div>: <></> 
+                editing ? 
+                
+                <div >
+                    <div>
+                        <p>Change Title</p>
+                    </div>
+                    <div className="w-full flex flex-row gap-2">
+                        <div className="w-full">
+                            <input className="w-full p-2 px-4 focus:outline-none focus:shadow-outline border rounded-md border-slate-500 text-slate-600 leading-none " ref={inputRef}/> 
+                        </div>
+                        <div>
+                            <Button text={'set title'} Callback={SetName}/>
+                        </div>
+                    </div>
+                </div>: <></> 
             : <></>}
+            
+            <div id="lesson-blocks" className="py-8">
             {lesson.lesson_chunks.map((block, index) => {
                 return <LessonBlock key = {index} block = {block} EditCallback={()=>{return}} AddCallback={(block)=>{return}} RemoveCallback={RemoveBlockCallback} editable={false} activeLesson={editing} index={index} />
             })}
+ 
             {editable ? 
                 editing ? <Button text={'delete'} Callback={()=>DeleteCallback(lesson)} /> : 
                 <Button text={'edit'} Callback={()=>EditCallback(lesson)} /> 
             : <></>}
+            </div>
         </div>
     )
 }
