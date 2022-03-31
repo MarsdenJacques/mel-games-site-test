@@ -115,7 +115,7 @@ export default function LessonsPage() {
 
 
 
-            <div id="container-searchbox ">
+            <div id="container-searchbox">
               <LessonMenu
               newLesson={!editingLesson} searchForLessons={searchForLessons} searchData={searchForLessons ? lessons : blocks}
               SearchCallback={ReturnSearch} NewLessonCallback={NewLesson} SaveCallback={SaveCurrentLesson}/>

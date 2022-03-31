@@ -16,11 +16,13 @@ export default function LessonPlan({lesson, SetLessonData, EditCallback, DeleteC
 
     return(
         <div id="wrapper-lesson-plan" className="rounded-xl p-4 m-4 my-2 flex flex-col">
-            <h3 className="font-bold text-2xl flex flex-row justify-center items-center">{lesson.name}</h3> 
+            <div id="lesson-plan-title" className="font-bold text-2xl flex flex-row justify-center items-center text-slate-700">
+                <h3>{lesson.name}</h3> 
+            </div>
             {editable ?
                 editing ? 
                 
-                <div >
+                <div id="container-change-title-box" className="">
                     <div>
                         <p>Change Title</p>
                     </div>
@@ -35,15 +37,16 @@ export default function LessonPlan({lesson, SetLessonData, EditCallback, DeleteC
                 </div>: <></> 
             : <></>}
             
-            <div id="lesson-blocks" className="py-8">
-            {lesson.lesson_chunks.map((block, index) => {
-                return <LessonBlock key = {index} block = {block} EditCallback={()=>{return}} AddCallback={(block)=>{return}} RemoveCallback={RemoveBlockCallback} editable={false} activeLesson={editing} index={index} />
-            })}
- 
-            {editable ? 
-                editing ? <Button text={'delete'} Callback={()=>DeleteCallback(lesson)} /> : 
-                <Button text={'edit'} Callback={()=>EditCallback(lesson)} /> 
-            : <></>}
+            <div id="lesson-blocks" className="pt-2">
+                {lesson.lesson_chunks.map((block, index) => {
+                    return <LessonBlock key = {index} block = {block} EditCallback={()=>{return}} AddCallback={(block)=>{return}} RemoveCallback={RemoveBlockCallback} editable={false} activeLesson={editing} index={index} />
+                })}
+                <div className="my-4 flex justify-center">
+                    {editable ? 
+                        editing ? <Button text={'delete'} Callback={()=>DeleteCallback(lesson)} /> : 
+                        <Button text={'edit'} Callback={()=>EditCallback(lesson)} /> 
+                    : <></>}
+                </div>
             </div>
         </div>
     )

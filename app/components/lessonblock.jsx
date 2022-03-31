@@ -13,18 +13,18 @@ export default function LessonBlock({block, AddCallback, RemoveCallback, editabl
     if(block === undefined) return <div></div>
 
     return(
-        <div className="rounded-xl border-gray-200 border-2 shadow my-2 hover:bg-zinc-100 flex flex-col">
-            <div className="flex flex-row">
-                <h3 className="p-2 px-8 m-2 flex-grow font-bold text-xl flex flex-row justify-start items-center">{block.name}</h3>
-                <p className="p-2 px-8 m-2 flex-grow flex flex-row justify-end items-center">Length: {block.length}</p>
+        <div className="rounded-xl border-slate-300 border shadow my-2 hover:bg-zinc-100 flex flex-col">
+            <div className="flex flex-row justify-between pt-4 px-4">
+                <h3 className="flex font-bold text-xl">{block.name}</h3>
+                <p className="text-xs py-1 px-4 rounded-full align-middle bg-blue-200">Length: {block.length}</p>
             </div>
-            <div className="p-2 m-2 flex flex-row">
-                <div className="flex-grow">
+            <div className="">
+                <div className="flex flex-grow flex-row p-4">
                     {editable ? <Button text={'add'} Callback={()=>AddCallback(block)}/> : <></>}
                     {activeLesson ? <Button text={'remove'} Callback={()=>RemoveCallback(index)}/>: <></>}
                 </div>
-                <p className="flex flex-row flex-wrap break-all justify-center items-center">Material: {block.content_url}</p>
             </div>
         </div>
     )
 }
+//<p className="flex flex-row flex-wrap break-all justify-left">Material: {block.content_url}</p>

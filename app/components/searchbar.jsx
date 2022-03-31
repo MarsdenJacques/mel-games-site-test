@@ -73,24 +73,26 @@ export default function Searchbar({searchForLessons, searchData, Callback}){
     return(
         <div id="wrapper-searchbar">
 		    	<div className="text-sm leading-none"><p>Keyword Search</p></div>
-        		<div id="container-searchbar">
-							<input className="w-full my-1 p-2 focus:outline-none focus:shadow-outline border rounded-md border-slate-500 text-slate-600 leading-none px-4" ref = {inputRef} />
-						</div>
-						<div className="flex flex-row gap-2">
-							<div id="button-clear" className="">
-								<Button text = {'search'} Callback={SearchTitle} />
-							</div>
-							<div className="my-2 flex gap-2 flex-wrap text-xs">
-								{!searchForLessons ? <> 
-									<SmallButton text = {'1 ~ 5mins'} Callback={()=>SearchDuration('1-5m')} selected={currentQuery.length==='1-5m'}/>
-									<SmallButton text = {'5 ~ 10mins'} Callback={()=>SearchDuration('5-10m')} selected={currentQuery.length==='5-10m'}/>
-									<SmallButton text = {'10 ~ 15mins'} Callback={()=>SearchDuration('10-15m')} selected={currentQuery.length==='10-15m'}/>
-									<SmallButton text = {'15 ~ 30mins'} Callback={()=>SearchDuration('15-30m')} selected={currentQuery.length==='15-30m'}/>
-									<SmallButton text = {'30mins +'} Callback={()=>SearchDuration('30m')} selected={currentQuery.length==='30m'}/>
-								</>: <></>}
-							</div>
-							{searched ?	<SmallButton text={'clear'} Callback={Clear} /> : <></>}
-						</div>
+        		<div id="container-searchbar" className="flex flex-row gap-2">
+                    <div className="w-full">
+                        <input className="w-full my-1 p-2 focus:outline-none focus:shadow-outline border rounded-md border-slate-500 text-slate-600 leading-none px-4" ref = {inputRef} />
+                    </div>
+                    <div>
+                        <Button text = {'search'} Callback={SearchTitle} />
+                    </div>
+				</div>
+				<div className="flex flex-row gap-2">
+					<div className="my-2 flex gap-2 flex-wrap text-xs">
+						{!searchForLessons ? <> 
+							<SmallButton text = {'1 ~ 5mins'} Callback={()=>SearchDuration('1-5m')} selected={currentQuery.length==='1-5m'}/>
+							<SmallButton text = {'5 ~ 10mins'} Callback={()=>SearchDuration('5-10m')} selected={currentQuery.length==='5-10m'}/>
+							<SmallButton text = {'10 ~ 15mins'} Callback={()=>SearchDuration('10-15m')} selected={currentQuery.length==='10-15m'}/>
+							<SmallButton text = {'15 ~ 30mins'} Callback={()=>SearchDuration('15-30m')} selected={currentQuery.length==='15-30m'}/>
+							<SmallButton text = {'30mins +'} Callback={()=>SearchDuration('30m')} selected={currentQuery.length==='30m'}/>
+						</>: <></>}
+					</div>
+					{searched ?	<SmallButton text={'clear'} Callback={Clear} /> : <></>}
+				</div>
         </div>
     )
 }
