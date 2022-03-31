@@ -9,15 +9,10 @@ import {
 
 import { useState, useEffect } from "react";
 
-import styles from "./tailwind.css"
 
 export function meta() {
   return { title: "New Remix App" };
 }
-
-export const links = () => [
-  { rel: "stylesheet", href: styles },
-];
 
 export default function App() {
   const [token, setToken] = useState('')
