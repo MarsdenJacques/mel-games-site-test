@@ -26,6 +26,7 @@ export default function LessonViewer(){
         for(let i = 0; i < lesson.lesson_chunks.length; i++){
             newText.push({text: lesson.lesson_chunks[i].name, link: lesson.lesson_chunks[i].content_url})
         }
+        setCurrentVid(0)
         setVidList(newText)
     }
 
