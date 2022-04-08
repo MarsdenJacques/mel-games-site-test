@@ -8,10 +8,9 @@ import {
   ScrollRestoration
 } from "remix";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import styles from "./tailwind.css"
-import Button from "./components/button";
 
 export function meta() {
   return { title: "New Remix App" };
@@ -26,10 +25,6 @@ export default function App() {
   const [isTeacher, setIsTeacher] = useState(false)
   const [blocks, setBlocks] = useState([])
   const [lessons, setLessons] = useState([])
-  const [loginError, setLoginError] = useState('')
-  
-  const userRef = useRef()
-  const passRef = useRef()
 
   useEffect(()=>{
     GetTokenFromBrowser()
@@ -41,7 +36,17 @@ export default function App() {
   }, [token])
 
   async function GetRequest(endpoint){
-    const request = fetch('https://bokoco.com/api/mel/v1/' + endpoint,{
+    const request = fetch('https://bokoco.com/api/mel/v1/' + endpoint + '?per_page=1000000',{
+      method: 'GET',
+      headers: new Headers({
+      'Authorization': 'Bearer ' + token}), 
+    }).then((res)=>res.json())
+    let result = await request
+    return result
+  }
+
+  async function GetRequestID(endpoint, id){
+    const request = fetch('https://bokoco.com/api/mel/v1/' + endpoint + '/' + id,{
       method: 'GET',
       headers: new Headers({
       'Authorization': 'Bearer ' + token}), 
@@ -192,39 +197,6 @@ export default function App() {
   
   const context = { blocks, lessons, SaveLesson, DeleteLesson, isTeacher }
 
-  async function Login(){
-    const request = fetch('https://bokoco.com/api/mel/v1/login?email=' + userRef.current.value + '&password=' + passRef.current.value,{
-      method: 'POST',
-    }).then((res)=>res.json())
-    let result = await request
-    if(result.error === undefined){
-      setLoginError('')
-      document.cookie = 'api_token=' + result.token
-      setToken(result.token)
-    }
-    else{
-      setLoginError(result.error)
-    }
-  }
-
-  function Logout(){
-    document.cookie='api_token=; Max-Age=-99999999;'
-    setToken('')
-    window.location.reload()
-  }
-
-  const LoginScreen = () =>{
-    return(
-      <div className="flex flex-col justify-start items-start m-4 p-4">
-        <h2 className="m-2 p-2 flex flex-row justify-center items-center">PLEASE LOGIN</h2>
-        <input className="rounded-xl border-slate-300 border m-2 px-2" ref={userRef}/>
-        <input className="rounded-xl border-slate-300 border m-2 px-2" ref={passRef} type={'password'}/>
-        <div className="m-2 flex flex-row justify-center items-center"><Button text={'Login'} Callback={Login}/></div>
-        {loginError === '' ? <></> : <p>{loginError}</p>}
-      </div>
-    )
-  }
-
   return (
     <html lang="en">
       <head>
@@ -242,10 +214,9 @@ export default function App() {
             <div className="text-blue-500"><Link to={'/lesson-viewer'}>Lesson Viewer</Link></div>
             <div className="text-blue-500">{isTeacher ? <Link to={'/lesson-maker'}>Lesson Maker</Link> : <></>}</div>
             <div id="header" className="text-blue-500"><Link to={'/'}>Home</Link></div>
-            {token === '' ? <></> : <div id="header" className="text-blue-500"><Button text={'Logout'} Callback={Logout}/></div>}
           </div>
           </div>
-        {token === '' ? <LoginScreen/> : <Outlet context={context}/>}
+        {token === '' ? <div>PLEASE LOGIN</div> : <Outlet context={context}/>}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
